@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ttt.mim.dao.LogSysDao">
+    <resultMap id="BaseResultMap" type="com.ttt.mim.domain.LogSys">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="msg" property="msg" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, msg, create_time
+    </sql>
+
+    <select id="query" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM log_sys
+        <where>
+            <if test="id != null and id != ''">and id LIKE CONCAT('%', #{id}, '%')</if>
+            <if test="msg != null and msg != ''">and msg LIKE CONCAT('%', #{msg}, '%')</if>
+            <if test="createTime != null and createTime != ''">and create_time LIKE CONCAT('%', #{createTime}, '%')</if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim != ''">
+                order by ${sort} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit ${offset} ${limit}
+        </if>
+    </select>
+
+    <insert id="add" parameterType="com.ttt.mim.domain.LogSys" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO log_sys (id, msg, create_time)
+        VALUES (#{id, jdbcType=INTEGER},
+                #{msg, jdbcType=VARCHAR},
+                #{createTime, jdbcType=TIMESTAMP})
+    </insert>
+
+
+    <delete id="delete">
+        DELETE
+        FROM log_sys
+        WHERE id = #{value}
+    </delete>
+
+    <delete id="batchDelete">
+        DELETE FROM log_sys WHERE id IN
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="count" resultType="java.lang.Integer">
+        select count(id) from log_sys
+    </select>
+</mapper>

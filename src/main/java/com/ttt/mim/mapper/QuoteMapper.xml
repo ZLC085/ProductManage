@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ttt.mim.dao.QuoteDao">
+    <resultMap id="BaseResultMap" type="com.ttt.mim.domain.Quote">
+        <id column="id" property="id" jdbcType="INTEGER"></id>
+        <result column="indent_num" property="indentNum" jdbcType="VARCHAR"></result>
+        <result column="m_id" property="mId" jdbcType="INTEGER"></result>
+        <result column="mc_id" property="mcId" jdbcType="INTEGER"/>
+        <result column="quote" property="quote" jdbcType="DOUBLE"></result>
+        <result column="number" property="number" jdbcType="INTEGER"/>
+        <result column="sum" property="sum" jdbcType="DOUBLE"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"></result>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,indent_num,m_id,mc_id,quote,num,sum,create_time
+    </sql>
+
+    <insert id="add" parameterType="com.ttt.mim.domain.Quote" useGeneratedKeys="true" keyColumn="id">
+        INSERT INTO goods_info.m_quote (indent_num, m_id, mc_id, quote, number, sum, create_time)
+        VALUES (#{indentNum,jdbcType = VARCHAR},
+                #{mId,jdbcType = INTEGER},
+                #{mcId,jdbcType = INTEGER},
+                #{quote,jdbcType = DOUBLE},
+                #{number,jdbcType = INTEGER},
+                #{sum,jdbcType = DOUBLE},
+                #{createTime,jdbcType = TIMESTAMP}
+                )
+    </insert>
+    <insert id="batchAdd" parameterType="java.util.List">
+        insert into goods_info.m_quote(indent_num, m_id, mc_id, quote, number, sum, create_time)
+        values
+        <foreach collection="list" item="quote" separator=",">
+           ( #{quote.indentNum},#{quote.mId},#{quote.mcId},#{quote.quote},#{quote.number},#{quote.sum},#{quote.createTime})
+        </foreach>
+    </insert>
+    <delete id="delete" >
+        DELETE FROM goods_info.m_quote WHERE id = #{id}
+    </delete>
+
+    <delete id="batchDelete">
+        DELETE FROM goods_info.m_quote WHERE id IN
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <delete id="deleteByIndentNum">
+        delete from goods_info.m_quote
+        where indent_num=#{identNum}
+    </delete>
+
+    <select id="query" parameterType="com.ttt.mim.domain.Quote">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM goods_info.m_quote
+        <where>
+            <if test="indentNum != null and indentNum != ''">and indent_num = #{indentNum}</if>
+            <if test="mId != null and mId != ''"> and m_id = #{mId}</if>
+            <if test="mcId != null and mcId != ''"> and mc_id = #{mcId}</if>
+            <if test="quote != null and quote != ''">and quote = #{quote}</if>
+            <if test="number != null and number != ''"> and number = #{number}</if>
+            <if test="sum != null and sum != ''"> and sum = #{sum}</if>
+            <if test="createTime != null and createTime != ''">and create_time = #{createTime}</if>
+            <if test="startTime !=null and startTime!=''"> and create_time <![CDATA[>=]]>  #{startTime} </if>
+            <if test="endTime !=null and endTime!=''"> and create_time  <![CDATA[<=]]>  #{endTime} </if>
+        </where>
+    </select>
+</mapper>

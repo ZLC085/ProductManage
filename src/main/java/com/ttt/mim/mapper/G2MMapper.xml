@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ttt.mim.dao.G2MDao">
+    <resultMap id="BaseResultMap" type="com.ttt.mim.domain.G2M">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="menu_id" property="menuId" jdbcType="INTEGER"/>
+        <result column="group_id" property="groupId" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, menu_id, group_id
+    </sql>
+
+    <insert id="addm2g" parameterType="com.ttt.mim.domain.G2M" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO sys_g2m (id, menu_id, group_id)
+        VALUES (#{id, jdbcType=INTEGER},
+                #{menuId, jdbcType=INTEGER},
+                #{groupId,jdbcType=INTEGER}
+        )
+    </insert>
+
+    <delete id="delm2g">
+        delete from sys_g2m where id in
+        <foreach item="id" collection="array" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="queryMbyGid" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM view_group_menu
+        <where>
+            <if test="groupId != null and groupId != ''"> and group_id LIKE CONCAT('%',#{groupId},'%') </if>
+            <if test="menuId != null and menuId != ''"> and menu_id LIKE CONCAT('%',#{menuId},'%') </if>
+            <if test="parentId != null and parentId != ''"> and parent_id LIKE CONCAT('%',#{parentId},'%') </if>
+            <if test="name != null and name != ''"> and name LIKE CONCAT('%',#{name},'%') </if>
+            <if test="url != null and url != ''"> and url LIKE CONCAT('%',#{url},'%') </if>
+            <if test="perm != null and perm != ''"> and perm LIKE CONCAT('%',#{perm},'%') </if>
+            <if test="icon != null and icon != ''"> and icon LIKE CONCAT('%',#{icon},'%') </if>
+            <if test="createTime != null and createTime != ''"> and create_time LIKE CONCAT('%',#{createTime},'%') </if>
+            <if test="modifyTime != null and modifyTime != ''"> and modify_time LIKE CONCAT('%',#{modifyTime},'%') </if>
+        </where>
+    </select>
+</mapper>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ttt.mim.dao.PurchaseDetailsDao">
+    <resultMap id="BaseResultMap" type="com.ttt.mim.domain.PurchaseDetails">
+        <result column="indent_num" property="indentNum" jdbcType="VARCHAR"></result>
+        <result column="purchase_num" property="purchaseNum" jdbcType="VARCHAR"></result>
+        <result column="purchase_name" property="purchaseName" jdbcType="VARCHAR"></result>
+        <result column="purchase_remark" property="purchaseRemark" jdbcType="VARCHAR"></result>
+        <result column="indent_name" property="indentName" jdbcType="VARCHAR"></result>
+        <result column="sum" property="sum" jdbcType="DOUBLE"></result>
+        <result column="factory_id" property="factoryId" jdbcType="INTEGER"></result>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"></result>
+        <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"></result>
+        <result column="approval_id" property="approvalId" jdbcType="INTEGER"></result>
+        <result column="approval_result" property="approvalResult" jdbcType="TINYINT"></result>
+        <result column="approval_opinion" property="approvalOpinion" jdbcType="VARCHAR"></result>
+        <result column="approval_time" property="approvalTime" jdbcType="TIMESTAMP"></result>
+        <result column="approval_name" property="approvalName" jdbcType="VARCHAR"></result>
+        <result column="factory_name" property="factoryName" jdbcType="VARCHAR"></result>
+        <result column="factory_phone" property="factoryPhone" jdbcType="VARCHAR"></result>
+        <result column="factory_social_code" property="factorySocialCode" jdbcType="VARCHAR"></result>
+        <result column="factory_legal_person" property="factoryLegalPerson" jdbcType="VARCHAR"></result>
+        <result column="factory_type" property="factoryType" jdbcType="VARCHAR"></result>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        indent_num,purchase_num,purchase_name,purchase_remark,indent_name,sum,factory_id,create_time,
+        modify_time,approval_id,approval_result,approval_opinion,approval_time,approval_name,factory_name,
+        factory_phone,factory_social_code,factory_legal_person,factory_type
+    </sql>
+
+    <select id="get" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM goods_info.view_purchase_details
+        WHERE purchase_name = #{purchaseNum} limit 1
+    </select>
+
+</mapper>

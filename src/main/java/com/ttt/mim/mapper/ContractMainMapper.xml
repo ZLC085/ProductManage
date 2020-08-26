@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ttt.mim.dao.ContractMainDao">
+    <!--<cache eviction="FIFO" flushInterval="60000" size="512" readOnly="true"/>-->
+    <resultMap id="BaseResultMap" type="com.ttt.mim.domain.ContractMain">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="num" property="num" jdbcType="VARCHAR"/>
+        <result column="filename" property="filename" jdbcType="VARCHAR"/>
+        <result column="file" property="file" jdbcType="BLOB" typeHandler="org.apache.ibatis.type.BlobTypeHandler"/>
+        <result column="filesize" property="filesize" jdbcType="BIGINT"/>
+        <result column="customer_id" property="customerId" jdbcType="INTEGER"/>
+        <result column="cost" property="cost" jdbcType="DOUBLE"/>
+        <result column="quote" property="quote" jdbcType="DOUBLE"/>
+        <result column="status" property="status" jdbcType="BOOLEAN"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
+        <result column="submit_time" property="submitTime" jdbcType="TIMESTAMP"/>
+        <result column="approve_id" property="approveId" jdbcType="INTEGER"/>
+        <result column="result" property="result" jdbcType="TINYINT"/>
+        <result column="opinion" property="opinion" jdbcType="VARCHAR"/>
+        <result column="approve_time" property="approveTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, num, filename, file, filesize, customer_id, cost, quote, status, create_time, modify_time, submit_time,
+        approve_id, result, opinion, approve_time
+    </sql>
+
+    <sql id="Base_Column_List2">
+        id, num, filename, filesize, customer_id, cost, quote, status, create_time, modify_time, submit_time,
+        approve_id, result, opinion, approve_time
+    </sql>
+
+    <select id="getById" parameterType="java.lang.Integer" resultType="com.ttt.mim.domain.ContractMain">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM contract_main
+        WHERE id = #{id,jdbcType=INTEGER} limit 1
+    </select>
+
+    <select id="query" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List2"/>
+        FROM contract_main
+        <where>
+            <if test="num != null and num != ''"> and num LIKE CONCAT('%',#{num},'%') </if>
+            <if test="filename != null and filename != ''"> and filename LIKE CONCAT('%',#{filename},'%') </if>
+            <if test="filesize != null and filesize != ''"> and filesize LIKE CONCAT('%',#{filesize},'%') </if>
+            <if test="cost != null and cost != ''"> and cost LIKE CONCAT('%',#{cost},'%') </if>
+            <if test="quote != null and quote != ''"> and quote LIKE CONCAT('%',#{quote},'%') </if>
+            <if test="status != null and status != ''"> and status = #{status} </if>
+            <if test="createTime != null and createTime != ''"> and create_time LIKE CONCAT('%',#{createTime},'%') </if>
+            <if test="modifyTime != null and modifyTime != ''"> and modify_time LIKE CONCAT('%',#{modifyTime},'%') </if>
+            <if test="submitTime != null and submitTime != ''"> and submit_time LIKE CONCAT('%',#{submitTime},'%') </if>
+            <if test="approveId != null and approveId != ''"> and approve_id LIKE CONCAT('%',#{approveId},'%') </if>
+            <if test="result != null and result != ''"> and result = #{result} </if>
+            <if test="opinion != null and opinion != ''"> and opinion LIKE CONCAT('%',#{opinion},'%') </if>
+            <if test="approveTime != null and approveTime != ''"> and approve_time LIKE CONCAT('%',#{approveTime},'%') </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit ${offset}, ${limit}
+        </if>
+    </select>
+
+    <insert id="add" parameterType="com.ttt.mim.domain.ContractMain" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO contract_main
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="num != null">num,</if>
+            <if test="filename != null">filename,</if>
+            <if test="file != null">file,</if>
+            <if test="filesize != null">filesize,</if>
+            <if test="customerId != null">customer_id,</if>
+            <if test="cost != null">cost,</if>
+            <if test="quote != null">quote,</if>
+            <if test="status != null">status,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="modifyTime != null">modify_time,</if>
+            <if test="submitTime != null">submit_time,</if>
+            <if test="approveId != null">approve_id,</if>
+            <if test="result != null">result,</if>
+            <if test="opinion != null">opinion,</if>
+            <if test="approveTime != null">approve_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="num != null">#{num,jdbcType=INTEGER},</if>
+            <if test="filename != null">#{filename,jdbcType=VARCHAR},</if>
+            <if test="file != null">#{file,jdbcType=BLOB},</if>
+            <if test="filesize != null">#{filesize,jdbcType=BIGINT},</if>
+            <if test="customerId != null">#{customerId,jdbcType=INTEGER},</if>
+            <if test="cost != null">#{cost,jdbcType=DOUBLE},</if>
+            <if test="quote != null">#{quote,jdbcType=DOUBLE},</if>
+            <if test="status != null">#{status,jdbcType=BOOLEAN},</if>
+            <if test="createTime != null">#{createTime,jdbcType=TIMESTAMP},</if>
+            <if test="modifyTime != null">#{modifyTime,jdbcType=TIMESTAMP},</if>
+            <if test="submitTime != null">#{submitTime,jdbcType=TIMESTAMP},</if>
+            <if test="approveId != null">#{approveId,jdbcType=INTEGER},</if>
+            <if test="result != null">#{result,jdbcType=TINYINT},</if>
+            <if test="opinion != null">#{opinion,jdbcType=VARCHAR},</if>
+            <if test="approveTime != null">#{approveTime,jdbcType=TIMESTAMP},</if>
+        </trim>
+    </insert>
+
+    <update id="update" parameterType="com.ttt.mim.domain.ContractMain">
+        UPDATE contract_main
+            <set>
+                <if test="num != null">num = #{num,jdbcType=INTEGER}, </if>
+                <if test="filename != null">filename = #{filename,jdbcType=VARCHAR}, </if>
+                <if test="file != null">file = #{file,jdbcType=BLOB}, </if>
+                <if test="filesize != null">filesize = #{filesize,jdbcType=BIGINT}, </if>
+                <if test="customerId != null">customer_id = #{customerId,jdbcType=INTEGER}, </if>
+                <if test="cost !=null">cost = #{cost,jdbcType=DOUBLE},</if>
+                <if test="quote != null">quote = #{quote,jdbcType=DOUBLE}, </if>
+                <if test="status !=null">status = #{status,jdbcType=INTEGER,jdbcType=BOOLEAN},</if>
+                <if test="createTime != null">create_time = #{createTime,jdbcType=TIMESTAMP}, </if>
+                <if test="modifyTime != null">modify_time = #{modifyTime,jdbcType=TIMESTAMP}, </if>
+                <if test="submitTime != null">submit_time = #{submitTime,jdbcType=TIMESTAMP}, </if>
+                <if test="approveId != null">approve_id = #{approveId,jdbcType=INTEGER}, </if>
+                <if test="result != null">result = #{result,jdbcType=TINYINT}, </if>
+                <if test="opinion != null">opinion = #{opinion,jdbcType=VARCHAR}, </if>
+                <if test="approveTime != null">approve_time = #{approveTime,jdbcType=TIMESTAMP}, </if>
+            </set>
+            where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM contract_main WHERE id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <delete id="batchDelete">
+        DELETE FROM contract_main WHERE id IN
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="count" resultType="java.lang.Integer">
+        SELECT
+        count(id)
+        FROM contract_main
+    </select>
+</mapper>

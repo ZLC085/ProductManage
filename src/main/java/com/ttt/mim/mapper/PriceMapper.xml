@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ttt.mim.dao.PriceDao">
+    <resultMap id="BaseResultMap" type="com.ttt.mim.domain.Price">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="m_id" property="mId" jdbcType="INTEGER"/>
+        <result column="factory_id" property="factoryId" jdbcType="INTEGER"/>
+        <result column="cost" property="cost" jdbcType="DOUBLE"/>
+        <result column="query_time" property="queryTime" jdbcType="TIMESTAMP"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, m_id, factory_id, cost, query_time,creat_time,modify_time
+    </sql>
+
+    <insert id="add" parameterType="com.ttt.mim.domain.Price" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO sys_group (id, m_id, factory_id, cost, query_time,creat_time,modify_time)
+        VALUES (#{id, jdbcType=INTEGER},
+                #{m_id, jdbcType=INTEGER},
+                #{factory_id, jdbcType=INTEGER},
+                #{cost, jdbcType=DOUBLE},
+                #{queryTime,jdbcType=TIMESTAMP},
+                #{createTime,jdbcType=TIMESTAMP},
+                #{modifyTime,jdbcType=TIMESTAMP}
+        )
+    </insert>
+
+    <delete id="delete">
+        DELETE FROM m_cost WHERE id = #{value}
+    </delete>
+
+    <delete id="batchDelete">
+        DELETE FROM m_cost WHERE id IN
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <update id="update" parameterType="com.ttt.mim.domain.Price">
+        UPDATE m_cost
+        <set>
+            <if test="m_id != null">m_id = #{mId}, </if>
+            <if test="factory_id != null">factory_id = #{factoryId}, </if>
+            <if test="cost != null">cost = #{cost}, </if>
+            <if test="query_time != null">query_time = #{queryTime}, </if>
+            <if test="create_time != null">create_time = #{createTime}, </if>
+            <if test="modify_time != null">modify_time = #{modifyTime}, </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="query" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM m_cost
+        <where>
+            <if test="mId != null and mId != ''"> and m_id LIKE CONCAT('%',#{mId},'%') </if>
+            <if test="factoryId != null and factoryId != ''"> and factory_id LIKE CONCAT('%',#{factoryId},'%') </if>
+            <if test="cost != null and cost != ''"> and cost LIKE CONCAT('%',#{cost},'%') </if>
+            <if test="queryTime != null and queryTime != ''"> and query_time LIKE CONCAT('%',#{queyTime},'%') </if>
+            <if test="createTime != null and createTime != ''"> and create_time LIKE CONCAT('%',#{createTime},'%') </if>
+            <if test="modifyTime != null and modifyTime != ''"> and modify_time LIKE CONCAT('%',#{modifyTime},'%') </if>
+        </where>
+    </select>
+
+    <select id="priceDetail" parameterType="Integer" resultType="com.ttt.mim.domain.Price">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM m_cost
+        <where>
+            id = #{id}
+        </where>
+    </select>
+</mapper>

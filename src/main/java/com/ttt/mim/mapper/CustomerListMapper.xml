@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ttt.mim.dao.CustomerListDao">
+    <resultMap id="BaseResultMap" type="com.ttt.mim.domain.CustomerList">
+        <id column="id" property="id" jdbcType="INTEGER"></id>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR"/>
+        <result column="legal_person" property="legalPerson" jdbcType="VARCHAR"/>
+        <result column="industry" property="industry" jdbcType="VARCHAR"/>
+        <result column="address" property="address" jdbcType="VARCHAR"/>
+        <result column="credit" property="credit" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,name,phone,legal_person,industry,address,credit,create_time,modify_time
+    </sql>
+
+    <select id="findById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM goods_info.customer
+        WHERE id = #{id} limit 1
+    </select>
+
+    <select id="query" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM goods_info.customer
+        <where>
+            <if test="id != null and id != ''">and id LIKE CONCAT('%',#{id},'%')</if>
+            <if test="name != null and name != ''">and name LIKE CONCAT('%',#{name},'%')</if>
+            <if test="phone != null and phone != ''">and phone LIKE CONCAT('%',#{phone},'%')</if>
+            <if test="legalPerson != null and legalPerson != ''">and legal_person LIKE CONCAT('%',#{legalPerson},'%')</if>
+            <if test="industry != null and industry != ''">and industry LIKE CONCAT('%',#{industry},'%')</if>
+            <if test="address != null and address != ''">and address LIKE CONCAT('%',#{address},'%')</if>
+            <if test="credit != null and credit != ''">and credit LIKE CONCAT('%',#{credit},'%')</if>
+            <if test="createTime != null and createTime != ''">and create_time LIKE CONCAT('%',#{createTime},'%')</if>
+            <if test="modifyTime != null and modifyTime != ''">and modify_time LIKE CONCAT('%',#{modifyTime},'%')</if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit ${offset}, ${limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="java.lang.Integer">
+        SELECT count(id)
+        FROM goods_info.customer
+        <where>
+            <if test="id != null and id != ''">and id LIKE CONCAT('%',#{id},'%')</if>
+            <if test="name != null and name != ''">and name LIKE CONCAT('%',#{name},'%')</if>
+            <if test="phone != null and phone != ''">and phone LIKE CONCAT('%',#{phone},'%')</if>
+            <if test="legalPerson != null and legalPerson != ''">and legal_person LIKE CONCAT('%',#{legalPerson},'%')</if>
+            <if test="industry != null and industry != ''">and industry LIKE CONCAT('%',#{industry},'%')</if>
+            <if test="address != null and address != ''">and address LIKE CONCAT('%',#{address},'%')</if>
+            <if test="credit != null and credit != ''">and credit LIKE CONCAT('%',#{credit},'%')</if>
+            <if test="createTime != null and createTime != ''">and create_time LIKE CONCAT('%',#{createTime},'%')</if>
+            <if test="modifyTime != null and modifyTime != ''">and modify_time LIKE CONCAT('%',#{modifyTime},'%')</if>
+        </where>
+    </select>
+
+</mapper>

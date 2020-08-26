@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ttt.mim.dao.PurchaseOutDataDao">
+    <resultMap id="BaseResultMap" type="com.ttt.mim.domain.PurchaseOutData">
+        <result column="indent_num" property="indentNum" jdbcType="VARCHAR"></result>
+        <result column="purchase_num" property="purchaseNum" jdbcType="VARCHAR"></result>
+        <result column="purchase_name" property="purchaseName" jdbcType="VARCHAR"></result>
+        <result column="purchase_remark" property="purchaseRemark" jdbcType="VARCHAR"></result>
+        <result column="indent_name" property="indentName" jdbcType="VARCHAR"></result>
+        <result column="sum" property="sum" jdbcType="DOUBLE"></result>
+        <result column="factory_name" property="factoryName" jdbcType="VARCHAR"></result>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"></result>
+        <result column="approval_result" property="approvalResult" jdbcType="TINYINT"></result>
+        <result column="approval_name" property="approvalName" jdbcType="VARCHAR"></result>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        indent_num,purchase_num,purchase_name,purchase_remark,indent_name,sum,factory_name,create_time,approval_result,approval_name
+    </sql>
+
+    <select id="query" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM goods_info.view_purchase_out
+        <where>
+            <if test="indentNum != null and indentNum != ''">and indent_num like CONCAT('%',#{indentNum},'%')</if>
+            <if test="purchaseNum != null and purchaseNum != ''">and purchase_num LIKE CONCAT('%',#{purchaseNum},'%')</if>
+            <if test="purchaseName != null and purchaseName != ''">and purchase_name LIKE  CONCAT('%',#{purchaseNum},'%')</if>
+            <if test="purchaseRemark != null and purchaseRemark != ''">and purchase_remark LIKE CONCAT('%',#{purchaseRemark},'%')</if>
+            <if test="indentName != null and indentName != ''">and indent_name  LIKE CONCAT('%',#{indentName},'%')</if>
+            <if test="sum != null and sum != ''">and sum LIKE CONCAT('%',#{sum},'%')</if>
+            <if test="factoryName != null and factoryName != ''">and factory_name LIKE CONCAT('%',#{factoryName},'%')</if>
+            <if test="createTime != null and createTime != ''">and create_time = #{createTime}</if>
+            <if test="approvalResult != null and approvalResult != ''">and approval_result = #{approvalResult}</if>
+            <if test="approvalName != null and approvalName != ''">and approval_name like concat('%',#{approvalName},'%')</if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+            <otherwise>
+                order by indent_num desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit ${offset}, ${limit}
+        </if>
+    </select>
+
+    <select id="get" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM goods_info.view_purchase_out
+        WHERE purchase_name = #{purchaseNum} limit 1
+    </select>
+    <select id="count" resultType="java.lang.Integer">
+        select count(purchase_num)
+        from goods_info.view_purchase_out
+        <where>
+            <if test="indentNum != null and indentNum != ''">and indent_num like CONCAT('%',#{indentNum},'%')</if>
+            <if test="purchaseNum != null and purchaseNum != ''">and purchase_num LIKE CONCAT('%',#{purchaseNum},'%')</if>
+            <if test="purchaseName != null and purchaseName != ''">and purchase_name LIKE  CONCAT('%',#{purchaseNum},'%')</if>
+            <if test="purchaseRemark != null and purchaseRemark != ''">and purchase_remark LIKE CONCAT('%',#{purchaseRemark},'%')</if>
+            <if test="indentName != null and indentName != ''">and indent_name  LIKE CONCAT('%',#{indentName},'%')</if>
+            <if test="sum != null and sum != ''">and sum LIKE CONCAT('%',#{sum},'%')</if>
+            <if test="factoryName != null and factoryName != ''">and factory_name LIKE CONCAT('%',#{factoryName},'%')</if>
+            <if test="createTime != null and createTime != ''">and create_time = #{createTime}</if>
+            <if test="approvalResult != null and approvalResult != ''">and approval_result = #{approvalResult}</if>
+            <if test="approvalName != null and approvalName != ''">and approval_name like concat('%',#{approvalName},'%')</if>
+        </where>
+    </select>
+</mapper>

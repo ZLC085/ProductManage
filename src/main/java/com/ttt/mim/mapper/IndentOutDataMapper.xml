@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ttt.mim.dao.IndentOutDataDao">
+    <resultMap id="BaseResultMap" type="com.ttt.mim.domain.IndentOutData">
+        <id column="id" property="id" jdbcType="INTEGER"></id>
+        <result column="indent_num" property="indentNum" jdbcType="VARCHAR"></result>
+        <result column="indent_name" property="indentName" jdbcType="VARCHAR"></result>
+        <result column="creator_id" property="creatorId" jdbcType="INTEGER"></result>
+        <result column="creator_name" property="creatorName" jdbcType="VARCHAR"></result>
+        <result column="customer_id" property="customerId" jdbcType="INTEGER"></result>
+        <result column="customer_name" property="customerName" jdbcType="VARCHAR"></result>
+        <result column="cost_money" property="costMoney" jdbcType="DOUBLE"></result>
+        <result column="quote_money" property="quoteMoney" jdbcType="DOUBLE"></result>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"></result>
+        <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"></result>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,indent_num,indent_name,creator_id,creator_name,customer_id,customer_name,cost_money,quote_money,create_time,modify_time
+    </sql>
+
+    <select id="get" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM goods_info.view_indent_out
+        WHERE indent_num = #{indentNum} limit 1
+    </select>
+
+    <select id="query" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM goods_info.view_indent_out
+        <where>
+            <if test="indentNum != null and indentNum != ''">and indent_num LIKE CONCAT('%',#{indentNum},'%')</if>
+            <if test="indentName != null and indentName != ''">and indent_name LIKE CONCAT('%',#{indentName},'%')</if>
+            <if test="creatorId != null and creatorId != ''">and creator_id = #{creatorId}</if>
+            <if test="creatorName != null and creatorName != ''">and creator_name LIKE CONCAT('%',#{creatorName},'%')</if>
+            <if test="customerId != null and customerId != ''">and customer_id = #{customerId}</if>
+            <if test="customerName != null and customerName != ''">and customer_name LIKE CONCAT('%',#{customerName},'%')</if>
+            <if test="costMoney != null and costMoney != ''">and cost_money = #{costMoney}</if>
+            <if test="quoteMoney != null and quoteMoney != ''">and quote_money = #{quoteMoney}</if>
+            <if test="createTime != null and createTime != ''">and create_time = #{createTime}</if>
+            <if test="modifyTime != null and modifyTime != ''">and modify_time = #{modifyTime}</if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+            <otherwise>
+                order by indent_num desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit ${offset}, ${limit}
+        </if>
+    </select>
+    <select id="count" resultType="java.lang.Integer" >
+        select count(indent_num)
+        from goods_info.view_indent_out
+        <where>
+            <if test="indentNum != null and indentNum != ''">and indent_num LIKE CONCAT('%',#{indentNum},'%')</if>
+            <if test="indentName != null and indentName != ''">and indent_name LIKE CONCAT('%',#{indentName},'%')</if>
+            <if test="creatorId != null and creatorId != ''">and creator_id = #{creatorId}</if>
+            <if test="creatorName != null and creatorName != ''">and creator_name LIKE CONCAT('%',#{creatorName},'%')</if>
+            <if test="customerId != null and customerId != ''">and customer_id = #{customerId}</if>
+            <if test="customerName != null and customerName != ''">and customer_name LIKE CONCAT('%',#{customerName},'%')</if>
+            <if test="costMoney != null and costMoney != ''">and cost_money = #{costMoney}</if>
+            <if test="quoteMoney != null and quoteMoney != ''">and quote_money = #{quoteMoney}</if>
+            <if test="createTime != null and createTime != ''">and create_time = #{createTime}</if>
+            <if test="modifyTime != null and modifyTime != ''">and modify_time = #{modifyTime}</if>
+        </where>
+    </select>
+</mapper>

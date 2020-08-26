@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ttt.mim.dao.ContractOperateDao">
+    <resultMap id="BaseResultMap" type="com.ttt.mim.domain.ContractOperate">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="contract_id" property="contractId" jdbcType="INTEGER"/>
+        <result column="payback" property="payback" jdbcType="DOUBLE"/>
+        <result column="pay_time" property="payTime" jdbcType="TIMESTAMP"/>
+        <result column="customer_id" property="customerId" jdbcType="INTEGER"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="check_filename" property="checkFilename" jdbcType="VARCHAR"/>
+        <result column="check_file" property="checkFile" jdbcType="BLOB"/>
+        <result column="check_filesize" property="checkFilesize" jdbcType="BIGINT"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, contract_id, payback, pay_time, customer_id, remark, check_filename, 
+        check_file, check_filesize, create_time, modify_time
+    </sql>
+
+    <select id="getById" parameterType="java.lang.Integer" resultType="com.ttt.mim.domain.ContractOperate">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM contract_operate
+        WHERE id = #{id} limit 1
+    </select>
+
+    <select id="query" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM contract_operate
+        <where>
+            <if test="id != null and id != ''"> and id = #{id} </if>
+            <if test="contractId != null and contractId != ''"> and contract_id = #{contractId} </if>
+            <if test="payback != null and payback != ''"> and payback = #{payback} </if>
+            <if test="payTime != null and payTime != ''"> and pay_time = #{payTime} </if>
+            <if test="customerId != null and customerId != ''"> and customer_id = #{customerId} </if>
+            <if test="remark != null and remark != ''"> and remark = #{remark} </if>
+            
+            <if test="checkFilename != null and checkFilename != ''"> and check_filename = #{checkFilename} </if>
+            <if test="checkFile != null and checkFile != ''"> and check_file = #{checkFile} </if>
+            <if test="checkFilesize != null and checkFilesize != ''"> and check_filesize = #{checkFilesize} </if>
+
+            <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
+            <if test="modifyTime != null and modifyTime != ''"> and modify_time = #{modifyTime} </if>
+        </where>
+    </select>
+
+    <insert id="add" parameterType="com.ttt.mim.domain.ContractOperate" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO contract_operate (id, contract_id, payback, pay_time, customer_id, remark, 
+                                  check_filename, check_file, check_filesize, create_time, modify_time
+                                  )
+        VALUES (#{id, jdbcType=INTEGER},
+                #{contract_id,jdbcType=INTEGER},
+                #{payback,jdbcType=DOUBLE},
+                #{pay_time,jdbcType=TIMESTAMP},
+                #{customer_id,jdbcType=INTEGER},
+                #{remark,jdbcType=VARCHAR},
+
+                #{check_filename,jdbcType=VARCHAR},
+                #{check_file,jdbcType=BLOB},
+                #{check_filesize,jdbcType=BIGINT},
+
+                #{create_time,jdbcType=TIMESTAMP},
+                #{modify_time,jdbcType=TIMESTAMP}
+        )
+    </insert>
+
+    <update id="update" parameterType="com.ttt.mim.domain.ContractOperate">
+        UPDATE contract_operate
+            <set>
+                <if test="contractId != null">contract_id = #{contractId}, </if>
+                <if test="payback != null">payback = #{payback}, </if>
+                <if test="payTime != null">pay_time = #{payTime}, </if>
+                <if test="customerId != null">customer_id = #{customerId}, </if>
+                <if test="remark != null">remark = #{remark}, </if>
+
+                <if test="checkFilename != null">check_filename = #{checkFilename}, </if>
+                <if test="checkFile != null">check_file = #{checkFile}, </if>
+                <if test="checkFilesize != null">check_filesize = #{checkFilesize}, </if>
+
+                <if test="createTime != null">create_time = #{createTime}, </if>
+                <if test="modifyTime != null">modify_time = #{modifyTime}, </if>
+            </set>
+            where id = #{id}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM contract_operate WHERE id = #{value}
+    </delete>
+
+    <delete id="batchDelete">
+        DELETE FROM contract_operate WHERE id IN
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

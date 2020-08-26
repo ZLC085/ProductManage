@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ttt.mim.dao.CategoryDao">
+    <resultMap id="BaseResultMap" type="com.ttt.mim.domain.Category">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="parent_id" property="parent_id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="create_time" property="create_time" jdbcType="TIMESTAMP"/>
+        <result column="modify_time" property="modify_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, parent_id, name, create_time, modify_time
+    </sql>
+
+    <insert id="add" parameterType="com.ttt.mim.domain.Category" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO m_category (id, parent_id, name, create_time, modify_time)
+        VALUES (#{id, jdbcType=INTEGER},
+                #{parent_id, jdbcType=INTEGER},
+                #{name, jdbcType=VARCHAR},
+                #{create_time, jdbcType=TIMESTAMP},
+                #{modify_time, jdbcType=TIMESTAMP}
+        )
+    </insert>
+
+    <update id="update" parameterType="com.ttt.mim.domain.Category">
+        UPDATE m_category
+        <set>
+            <if test="parent_id != null">parent_id = #{parent_id}, </if>
+            <if test="name != null">name = #{name}, </if>
+            <if test="create_time != null">create_time = #{create_time}, </if>
+            <if test="modify_time != null">modify_time = #{modify_time} </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM m_category WHERE id = #{id}
+    </delete>
+
+    <delete id="batchDelete">
+        DELETE FROM m_category WHERE id IN
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="getById" parameterType="Integer" resultType="com.ttt.mim.domain.Category">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM m_category
+        <where>
+            id = #{id}
+        </where>
+    </select>
+
+    <select id="query" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM m_category
+        <where>
+            <if test="id != null and id != ''"> and id = #{id} </if>
+            <if test="parent_id != null and parent_id != ''"> and parent_id = #{parent_id} </if>
+            <if test="name != null and name != ''"> and name = #{name} </if>
+            <if test="create_time != null and create_time != ''"> and create_time = #{create_time} </if>
+            <if test="modify_time != null and modify_time != ''"> and modify_time = #{modify_time} </if>
+        </where>
+    </select>
+</mapper>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ttt.mim.dao.IndentDao">
+    <resultMap id="BaseResultType" type="com.ttt.mim.domain.Indent">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="num" property="num" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="user_id" property="userId" jdbcType="INTEGER"/>
+        <result column="customer_id" property="customerId" jdbcType="INTEGER"/>
+        <result column="cost_money" property="costMoney" jdbcType="DOUBLE"/>
+        <result column="quote_money" property="quoteMoney" jdbcType="DOUBLE"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,num,name,user_id,customer_id,cost_money,quote_money,remark,create_time,modify_time
+    </sql>
+    <select id="get" resultMap="BaseResultType">
+        select
+        <include refid="Base_Column_List"/>
+        from goods_info.indent
+        where num=#{indentNum} limit 1
+    </select>
+    <select id="query" resultMap="BaseResultType">
+        select
+        <include refid="Base_Column_List"/>
+        from goods_info.indent
+        <where>
+            <if test="id !=null and id!=''"> and id CONCAT('%',#{id},'%') </if>
+            <if test="num !=null and num!=''"> and num like CONCAT('%',#{num},'%')  </if>
+            <if test="name !=null and name!=''"> and name like CONCAT('%',#{name},'%') </if>
+            <if test="userId !=null and userId!=''"> and user_id like CONCAT('%',#{userId},'%') </if>
+            <if test="customerId !=null and customerId!=''"> and customer_id like CONCAT('%',#{customerId},'%') </if>
+            <if test="costMoney !=null and costMoney!=''"> and cost_money=#{costMoney} </if>
+            <if test="quoteMoney !=null and quoteMoney!=''"> and quote_money=#{quoteMoney} </if>
+            <if test="remark !=null and remark!=''"> and remark like CONCAT('%',#{remark},'%') </if>
+            <if test="createTime !=null and createTime!=''"> and create_time=#{createTime} </if>
+            <if test="modifyTime !=null and modifyTime!=''"> and modify_time=#{modifyTime} </if>
+            <if test="startTime !=null and startTime!=''"> and create_time <![CDATA[>=]]>  #{startTime} </if>
+            <if test="endTime !=null and endTime!=''"> and create_time  <![CDATA[<=]]>  #{endTime} </if>
+        </where>
+    </select>
+    <insert id="add" useGeneratedKeys="true" keyProperty="id">
+        insert into goods_info.indent(num, name, user_id, customer_id, cost_money, quote_money, remark, create_time, modify_time)
+        values (
+        #{num},#{name},#{userId},#{customerId},#{costMoney},#{quoteMoney},#{remark},#{createTime},#{modifyTime}
+        )
+    </insert>
+    <update id="update" >
+        update goods_info.indent
+        <set>
+            <if test="name != null and name !=''">name =#{name},</if>
+            <if test="remark != null and name !=''">remark=#{remark},</if>
+            <if test="modifyTime != null and modifyTime !=''">modify_time=#{modifyTime}</if>
+        </set>
+        where num=#{num}
+    </update>
+    <delete id="delete">
+        delete from goods_info.indent where num=#{num}
+    </delete>
+    <delete id="batchDelete" >
+        delete from goods_info.indent where num in
+        <foreach item="num" collection="array" open="(" close=")" separator=",">
+            #{num}
+        </foreach>
+    </delete>
+    <select id="getTodayMaxIndentNum" resultType="java.lang.String">
+        select num from goods_info.indent
+        where num like CONCAT('%',#{todayNumStr},'%')
+        order by id desc limit 1
+    </select>
+
+
+</mapper>

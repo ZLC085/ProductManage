@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ttt.mim.dao.PurchaseMaterialsDao">
+    <resultMap id="BaseResultMap" type="com.ttt.mim.domain.PurchaseMaterials">
+        <result column="purchase_num" property="purchaseNum" jdbcType="VARCHAR"></result>
+        <result column="number" property="number" jdbcType="INTEGER"></result>
+        <result column="sum" property="sum" jdbcType="DOUBLE"></result>
+        <result column="name" property="name" jdbcType="VARCHAR"></result>
+        <result column="spec" property="spec" jdbcType="VARCHAR"></result>
+        <result column="unit" property="unit" jdbcType="VARCHAR"></result>
+        <result column="use" property="use" jdbcType="VARCHAR"></result>
+        <result column="use_unit" property="useUnit" jdbcType="VARCHAR"></result>
+        <result column="pic_id" property="picId" jdbcType="INTEGER"></result>
+        <result column="cost" property="cost" jdbcType="DOUBLE"></result>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        purchase_num,number,sum,name,spec,unit,use_unit,pic_id,cost,"use"
+    </sql>
+
+    <select id="get" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM goods_info.view_purchase_material
+        WHERE purchase_num = #{purchaseNum}
+    </select>
+</mapper>

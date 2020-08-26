@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ttt.mim.dao.GroupDao">
+    <resultMap id="BaseResultMap" type="com.ttt.mim.domain.Group">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="group_name" property="groupName" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, group_name, remark, create_time, modify_time
+    </sql>
+
+    <insert id="add" parameterType="com.ttt.mim.domain.Group" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO sys_group (id, group_name, remark, create_time, modify_time)
+        VALUES (#{id, jdbcType=INTEGER},
+                #{groupName, jdbcType=VARCHAR},
+                #{remark,jdbcType=VARCHAR},
+                #{createTime,jdbcType=TIMESTAMP},
+                #{modifyTime,jdbcType=TIMESTAMP}
+        )
+    </insert>
+
+    <delete id="delete">
+        delete from sys_group where id in
+        <foreach item="id" collection="array" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <update id="update" parameterType="com.ttt.mim.domain.Group">
+        UPDATE sys_group
+        <set>
+            <if test="groupName != null">group_name = #{groupName}, </if>
+            <if test="remark != null">remark = #{remark}, </if>
+            <if test="modifyTime != null">modify_time = #{modifyTime}, </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="query" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM sys_group
+        <where>
+            <if test="id != null and id != ''"> and id LIKE CONCAT('%',#{id},'%') </if>
+            <if test="groupName != null and groupName != ''"> and group_id LIKE CONCAT('%',#{groupNmae},'%') </if>
+            <if test="remark != null and remark != ''"> and remark LIKE CONCAT('%',#{remark},'%') </if>
+            <if test="createTime != null and createTime != ''"> and create_time LIKE CONCAT('%',#{createTime},'%') </if>
+            <if test="modifyTime != null and modifyTime != ''"> and modify_time LIKE CONCAT('%',#{modifyTime},'%') </if>
+        </where>
+    </select>
+</mapper>

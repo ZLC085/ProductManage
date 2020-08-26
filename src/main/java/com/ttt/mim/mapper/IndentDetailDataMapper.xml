@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ttt.mim.dao.IndentDetailDao">
+    <resultMap id="BaseResultMap" type="com.ttt.mim.domain.IndentDetailData">
+        <result column="indent_num" property="indentNum" jdbcType="VARCHAR"></result>
+        <result column="quote" property="quote" jdbcType="DOUBLE"></result>
+        <result column="number" property="number" jdbcType="INTEGER"></result>
+        <result column="sum" property="sum" jdbcType="DOUBLE"></result>
+        <result column="factory_name" property="factoryName" jdbcType="VARCHAR"></result>
+        <result column="cost" property="cost" jdbcType="DOUBLE"></result>
+        <result column="m_name" property="mName" jdbcType="VARCHAR"></result>
+        <result column="spec" property="spec" jdbcType="VARCHAR"></result>
+        <result column="pic_id" property="picId" jdbcType="INTEGER"></result>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        indent_num, quote, number, sum, factory_name, cost, m_name, spec, pic_id
+    </sql>
+    <select id="getByIndentNum" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from goods_info.view_indent_detail
+        where indent_num=#{indentNum}
+    </select>
+</mapper>

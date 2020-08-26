@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ttt.mim.dao.FactoryEvalDao">
+    <resultMap id="BaseResultMap" type="com.ttt.mim.domain.FactoryEval">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <id column="factory_id" property="factoryId" jdbcType="INTEGER"/>
+        <id column="user_id" property="userId" jdbcType="INTEGER"/>
+        <result column="score" property="score" jdbcType="FLOAT"/>
+        <result column="content" property="content" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+id, factory_id, user_id, score, content, create_time
+    </sql>
+    <insert id="add" parameterType="com.ttt.mim.domain.FactoryEval" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO factory_eval
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="id != null">id,</if>
+        <if test="factoryId!= null">factory_id,</if>
+        <if test="userId!= null">user_id,</if>
+        <if test="score != null">score,</if>
+        <if test="content != null">content,</if>
+        <if test="createTime != null">create_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <if test="factoryId != null">#{factoryId,jdbcType=INTEGER},</if>
+        <if test="userId != null">#{userId,jdbcType=INTEGER},</if>
+        <if test="score != null">#{score,jdbcType=FLOAT},</if>
+        <if test="content!= null">#{content,jdbcType=VARCHAR},</if>
+        <if test="createTime!= null">#{createTime,jdbcType=TIMESTAMP},</if>
+        </trim>
+    </insert>
+    <select id="query" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        FROM factory_eval
+        <where>
+        <if test="factoryId != null and factoryId != ''"> and factory_id LIKE CONCAT('%',#{name},'%')</if>
+        <if test="factoryId != null and userId != ''"> and user_id LIKE CONCAT('%',#{name},'%')</if>
+        <if test="score != null and score != ''">and score LIKE CONCAT('%',#{name},'%') </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <select id="findByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM factory_eval
+        WHERE user_id = #{id} limit 1
+    </select>
+    <select id="count" resultType="java.lang.Integer">
+        SELECT
+        count(id)
+        FROM factory
+    </select>
+</mapper>

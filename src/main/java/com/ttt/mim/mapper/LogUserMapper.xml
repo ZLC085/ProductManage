@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ttt.mim.dao.LogUserDao">
+    <resultMap id="BaseResultMap" type="com.ttt.mim.domain.LogUser">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="user_id" property="userId" jdbcType="INTEGER"/>
+        <result column="username" property="userName" jdbcType="VARCHAR"/>
+        <result column="operation" property="operation" jdbcType="VARCHAR"/>
+        <result column="ip" property="ip" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, user_id, userName, operation, ip, create_time
+    </sql>
+
+    <select id="query" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM log_user
+        <where>
+            <if test="id != null and id != ''">and id LIKE CONCAT('%', #{id}, '%')</if>
+            <if test="userId != null and userId != ''">and user_id LIKE CONCAT('%', #{userId}, '%')</if>
+            <if test="userName != null and userName != ''">and username LIKE CONCAT('%', #{userName}, '%')</if>
+            <if test="operation != null and operation != ''">and operation LIKE CONCAT('%', #{operation}, '%')</if>
+            <if test="ip != null and ip != ''">and ip LIKE CONCAT('%', #{ip}, '%')</if>
+            <if test="createTime != null and createTime != ''">and create_time LIKE CONCAT('%', #{createTime}, '%')</if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim != ''">
+                order by ${sort} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit ${offset} ${limit}
+        </if>
+    </select>
+
+    <insert id="add" parameterType="com.ttt.mim.domain.LogUser" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO log_user
+            (user_id, username, operation, ip, create_time)
+        VALUES (#{userId, jdbcType=INTEGER},
+                #{userName,jdbcType=VARCHAR},
+                #{operation,jdbcType=VARCHAR},
+                #{ip,jdbcType=VARCHAR},
+                #{createTime,jdbcType=TIMESTAMP})
+    </insert>
+
+    <delete id="delete">
+        DELETE
+        FROM log_user
+        WHERE id = #{value}
+    </delete>
+
+    <delete id="batchDelete">
+        DELETE FROM log_user WHERE id IN
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="count" resultType="java.lang.Integer">
+        select count(id) from log_user
+    </select>
+</mapper>

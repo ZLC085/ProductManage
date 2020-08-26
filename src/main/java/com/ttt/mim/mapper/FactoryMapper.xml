@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ttt.mim.dao.FactoryDao">
+    <resultMap id="BaseResultMap" type="com.ttt.mim.domain.Factory">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR"/>
+        <result column="social_code" property="socialCode" jdbcType="VARCHAR"/>
+        <result column="reg_num" property="regNum" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="VARCHAR"/>
+        <result column="legal_person" property="legalPerson" jdbcType="VARCHAR"/>
+        <result column="reg_capital" property="regCapital" jdbcType="VARCHAR"/>
+        <result column="reg_agency" property="regAgency" jdbcType="VARCHAR"/>
+        <result column="org_code" property="orgCode" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="VARCHAR"/>
+        <result column="industry" property="industry" jdbcType="VARCHAR"/>
+        <result column="establish_date" property="establishDate" jdbcType="TIMESTAMP"/>
+        <result column="run_start" property="runStart" jdbcType="TIMESTAMP"/>
+        <result column="run_end" property="runEnd" jdbcType="TIMESTAMP"/>
+        <result column="release_license_time" property="releaseLicenseTime" jdbcType="TIMESTAMP"/>
+        <result column="address" property="address" jdbcType="VARCHAR"/>
+        <result column="bus_scope" property="busScope" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+id, name, phone, social_code, reg_num, type, legal_person, reg_capital, reg_agency, org_code, status, industry, establish_date,
+ run_start, run_end, release_license_time, address, bus_scope, create_time, modify_time
+            </sql>
+
+    <insert id="add" parameterType="com.ttt.mim.domain.Factory" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO factory
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="id != null">id,</if>
+        <if test="name != null">name,</if>
+        <if test="phone != null">phone,</if>
+        <if test="socialCode != null">social_code,</if>
+        <if test="regNum != null">reg_num,</if>
+        <if test="type != null">type,</if>
+        <if test="legalPerson != null">legal_person,</if>
+        <if test="regCapital != null">reg_capital,</if>
+        <if test="regAgency != null">reg_agency,</if>
+        <if test="orgCode!= null">org_code,</if>
+        <if test="status != null">status,</if>
+        <if test="industry != null">industry,</if>
+        <if test="establishDate != null">establish_date,</if>
+        <if test="runStart != null">run_start,</if>
+        <if test="runEnd != null">run_end,</if>
+        <if test="releaseLicenseTime != null">release_license_time,</if>
+        <if test="address != null">address,</if>
+        <if test="busScope!= null">bus_scope,</if>
+        <if test="createTime != null">create_time,</if>
+        <if test="modifyTime != null">modify_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <if test="name != null">#{name,jdbcType=VARCHAR},</if>
+        <if test="phone!= null">#{phone,jdbcType=VARCHAR},</if>
+        <if test="socialCode!= null">#{socialCode,jdbcType=VARCHAR},</if>
+        <if test="regNum!= null">#{regNum,jdbcType=VARCHAR},</if>
+        <if test="type != null">#{type,jdbcType=VARCHAR},</if>
+        <if test="legalPerson != null">#{legalPerson,jdbcType=VARCHAR},</if>
+        <if test="regCapital != null">#{regCapital,jdbcType=VARCHAR},</if>
+        <if test="regAgency!= null">#{regAgency,jdbcType=VARCHAR},</if>
+        <if test="orgCode != null">#{orgCode,jdbcType=VARCHAR},</if>
+        <if test="status!= null">#{status,jdbcType=VARCHAR},</if>
+        <if test="industry!= null">#{industry,jdbcType=VARCHAR},</if>
+        <if test="establishDate != null">#{establishDate,jdbcType=TIMESTAMP},</if>
+        <if test="runStart != null">#{runStart,jdbcType=TIMESTAMP},</if>
+        <if test="runEnd!= null">#{runEnd,jdbcType=TIMESTAMP},</if>
+        <if test="releaseLicenseTime!= null">#{releaseLicenseTime,jdbcType=TIMESTAMP},</if>
+        <if test="address!= null">#{address,jdbcType=VARCHAR},</if>
+        <if test="busScope!= null">#{busScope,jdbcType=VARCHAR},</if>
+        <if test="createTime != null">#{createTime, jdbcType=TIMESTAMP},</if>
+        <if test="modifyTime!= null">#{modifyTime, jdbcType=TIMESTAMP}</if>
+        </trim>
+    </insert>
+
+    <update id="update" parameterType="com.ttt.mim.domain.Factory" >
+        UPDATE factory
+        <set>
+            <if test="name != null">name = #{name,jdbcType=VARCHAR}, </if>
+            <if test="phone != null">phone=#{phone,jdbcType=VARCHAR},</if>
+            <if test="socialCode!=null"> social_code= #{socialCode,jdbcType=VARCHAR},</if>
+            <if test="regNum!=null"> reg_num= #{regNum,jdbcType=VARCHAR},</if>
+            <if test="type!=null"> type= #{type,jdbcType=VARCHAR},</if>
+            <if test="legalPerson!=null"> legal_person= #{legalPerson,jdbcType=VARCHAR},</if>
+            <if test="regCapital!=null"> reg_capital= #{regCapital,jdbcType=VARCHAR},</if>
+            <if test="regAgency!=null"> reg_agency= #{regAgency,jdbcType=VARCHAR},</if>
+            <if test="orgCode!=null"> org_code= #{orgCode,jdbcType=VARCHAR},</if>
+            <if test="status!=null"> status= #{status,jdbcType=VARCHAR},</if>
+            <if test="industry!=null"> industry= #{industry,jdbcType=VARCHAR},</if>
+            <if test="establishDate!=null">establish_date = #{establishDate,jdbcType=TIMESTAMP},</if>
+            <if test="runStart!=null"> run_start= #{runStart,jdbcType=TIMESTAMP},</if>
+            <if test="runEnd!=null"> run_end= #{runEnd,jdbcType=TIMESTAMP},</if>
+            <if test="releaseLicenseTime!=null"> release_license_time= #{releaseLicenseTime,jdbcType=TIMESTAMP},</if>
+            <if test="address!=null">address = #{address,jdbcType=VARCHAR},</if>
+            <if test="busScope!=null">bus_scope = #{busScope,jdbcType=VARCHAR},</if>
+            <if test="modifyTime != null">modify_time = #{modifyTime,jdbcType=TIMESTAMP},</if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM factory WHERE id = #{id}
+    </delete>
+
+    <delete id="batchDelete">
+        DELETE FROM factory WHERE id IN
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="query" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from factory
+        <where>
+            <if test="name != null and name != ''">and name LIKE CONCAT('%',#{name},'%')</if>
+            <if test="phone != null and phone !=''">and phone LIKE CONCAT('%',#{phone},'%')</if>
+            <if test="socialCode!= null">and social_code LIKE CONCAT('%',#{social_code},'%')</if>
+            <if test="regNum!=null and regNum!=''">and reg_num LIKE CONCAT('%',#{reg_num},'%')</if>
+            <if test="type!=null and type!=''">and type LIKE CONCAT('%',#{type},'%')</if>
+            <if test="legalPerson!=null and legalPerson!=''">and legal_person LIKE CONCAT('%',#{legal_person},'%')</if>
+            <if test="regCapital!=null and regCapital!=''">and  reg_capital LIKE CONCAT('%',#{reg_capital},'%')</if>
+            <if test="regAgency!=null and regAgency!=''">and reg_agency LIKE CONCAT('%',#{reg_agency},'%')</if>
+            <if test="orgCode!=null and orgCode!=''">and org_code LIKE CONCAT('%',#{org_code},'%')</if>
+            <if test="status!=null and status!=''">and status LIKE CONCAT('%',#{status},'%')</if>
+            <if test="industry!=null and industry!=''">and industry LIKE CONCAT('%',#{industry},'%')</if>
+            <if test="establishDate!=null and establishDate!=''">and establish_date LIKE CONCAT('%',#{establish_date},'%')</if>
+            <if test="runStart!=null and runStart!=''">and run_start LIKE CONCAT('%',#{run_start},'%')</if>
+            <if test="runEnd!=null and runEnd!=''">and run_end LIKE CONCAT('%',#{run_end},'%')</if>
+            <if test="releaseLicenseTime!=null and releaseLicenseTime!=''">and release_license_time LIKE CONCAT('%',#{release_license_time},'%')</if>
+            <if test="address!=null and address!=''">and address LIKE CONCAT('%',#{address},'%')</if>
+            <if test="busScope!=null and busScope!=''">and bus_scope LIKE CONCAT('%',#{bus_scope},'%')</if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+    <select id="findById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM factory
+        WHERE id = #{id} limit 1
+    </select>
+    <select id="count" resultType="java.lang.Integer">
+        SELECT
+        count(id)
+        FROM factory
+    </select>
+</mapper>

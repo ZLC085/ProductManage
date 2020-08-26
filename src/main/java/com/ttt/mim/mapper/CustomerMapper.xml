@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ttt.mim.dao.CustomerDao">
+    <resultMap id="BaseResultMap" type="com.ttt.mim.domain.Customer">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="former_name" property="formerName" jdbcType="VARCHAR"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR"/>
+        <result column="social_code" property="socialCode" jdbcType="VARCHAR"/>
+        <result column="legal_person" property="legalPerson" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="VARCHAR"/>
+        <result column="industry" property="industry" jdbcType="VARCHAR"/>
+        <result column="run_start" property="runStart" jdbcType="TIMESTAMP"/>
+        <result column="run_end" property="runEnd" jdbcType="TIMESTAMP"/>
+        <result column="address" property="address" jdbcType="VARCHAR"/>
+        <result column="credit" property="credit" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    
+    <sql id="Base_Column_List">
+        id,name,former_name,phone,social_code,legal_person,status,industry,
+        run_start,run_end,address,credit,create_time,modify_time
+    </sql>
+
+    <insert id="add" parameterType="com.ttt.mim.domain.Customer" useGeneratedKeys="true" keyColumn="id">
+        INSERT INTO goods_info.customer (name, former_name, phone, social_code, legal_person, status,
+        industry, run_start, run_end, address, credit, create_time, modify_time)
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">name,</if>
+            <if test="formerName != null">former_name,</if>
+            <if test="phone != null">phone,</if>
+            <if test="socialCode != null">social_code,</if>
+            <if test="legalPerson != null">legal_person,</if>
+            <if test="status != null">status,</if>
+            <if test="industry != null">industry,</if>
+            <if test="runStart != null">run_start,</if>
+            <if test="runEnd != null">run_end,</if>
+            <if test="address != null">address,</if>
+            <if test="credit != null">credit,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="modifyTime != null">modify_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">#{name,jdbcType=INTEGER},</if>
+            <if test="formerName != null">#{formerName,jdbcType=VARCHAR},</if>
+            <if test="phone != null">#{phone,jdbcType=VARCHAR},</if>
+            <if test="socialCode != null">#{socialCode,jdbcType=VARCHAR},</if>
+            <if test="legalPerson != null">#{legalPerson,jdbcType=VARCHAR},</if>
+            <if test="status != null">#{status,jdbcType=VARCHAR},</if>
+            <if test="industry != null">#{industry,jdbcType=VARCHAR},</if>
+            <if test="runStart != null">#{runStart,jdbcType=TIMESTAMP},</if>
+            <if test="runEnd != null">#{runEnd,jdbcType=TIMESTAMP},</if>
+            <if test="address != null">#{address,jdbcType=VARCHAR},</if>
+            <if test="credit != null">#{credit,jdbcType=VARCHAR},</if>
+            <if test="createTime != null">#{createTime,jdbcType=TIMESTAMP},</if>
+            <if test="modifyTime != null">#{modifyTime,jdbcType=TIMESTAMP},</if>
+        </trim>
+    </insert>
+
+    <update id="update" parameterType="com.ttt.mim.domain.Customer">
+        UPDATE goods_info.customer
+        <set>
+            <if test="name != null">and name = #{name}</if>
+            <if test="formerName != null">and former_name = #{formerName}</if>
+            <if test="phone != null">and phone = #{phone}</if>
+            <if test="socialCode != null">and social_code = #{socialCode}</if>
+            <if test="legalPerson != null">and legal_person = #{legalPerson}</if>
+            <if test="status != null">and status = #{status}</if>
+            <if test="industry != null">and industry = #{industry}</if>
+            <if test="runStart != null">and run_start = #{runStart}</if>
+            <if test="runEnd != null">and run_end = #{runEnd}</if>
+            <if test="address != null">and address = #{address}</if>
+            <if test="credit != null">and credit = #{credit}</if>
+            <if test="modifyTime != null">and modify_time = #{modifyTime}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+    
+    <delete id="delete">
+        DELETE FROM goods_info.customer WHERE id = #{value}
+    </delete>
+
+    <delete id="batchDelete">
+        DELETE FROM goods_info.customer WHERE IN
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #id
+        </foreach>
+    </delete>
+
+    <select id="findById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM goods_info.customer
+        WHERE id = #{id} limit 1
+    </select>
+
+    <select id="findByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM goods_info.customer
+        WHERE name = #{name} limit 1
+    </select>
+    
+    <select id="query" resultMap="BaseResultMap">
+        SELECT 
+        <include refid="Base_Column_List"/>
+        FROM goods_info.customer
+        <where>
+            <if test="name != null and name != ''">and name LIKE CONCAT('%',#{name},'%')</if>
+            <if test="formerName != null and formerName != ''">and former_name LIKE CONCAT('%',#{formerName},'%')</if>
+            <if test="phone != null and phone != ''">and phone LIKE CONCAT('%',#{phone},'%')</if>
+            <if test="socialCode != null and socialCode != ''">and social_code LIKE CONCAT('%',#{socialCode},'%')</if>
+            <if test="legalPerson != null and legalPerson != ''">and legal_person LIKE CONCAT('%',#{legalPerson},'%')</if>
+            <if test="status != null and status != ''">and status LIKE CONCAT('%',#{status},'%')</if>
+            <if test="industry != null and industry != ''">and industry LIKE CONCAT('%',#{industry},'%')</if>
+            <if test="runStart != null and runStart != ''">and run_start LIKE CONCAT('%',#{runStart},'%')</if>
+            <if test="runEnd != null and runEnd != ''">and run_end LIKE CONCAT('%',#{runEnd},'%')</if>
+            <if test="address != null and address != ''">and address LIKE CONCAT('%',#{address},'%')</if>
+            <if test="credit != null and credit != ''">and credit LIKE CONCAT('%',#{credit},'%')</if>
+            <if test="createTime != null and createTime != ''">and create_time LIKE CONCAT('%',#{createTime},'%')</if>
+            <if test="modifyTime != null and modifyTime != ''">and modify_time LIKE CONCAT('%',#{modifyTime},'%')</if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit ${offset}, ${limit}
+        </if>
+    </select>
+
+</mapper>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ttt.mim.dao.U2GDao">
+    <resultMap id="BaseResultMap" type="com.ttt.mim.domain.U2G">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="user_id" property="userId" jdbcType="INTEGER"/>
+        <result column="group_id" property="groupId" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, user_id, group_id
+    </sql>
+
+    <insert id="addu2g" parameterType="com.ttt.mim.domain.U2G" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO sys_u2g (id, user_id, group_id)
+        VALUES (#{id, jdbcType=INTEGER},
+                #{userId, jdbcType=INTEGER},
+                #{groupId,jdbcType=INTEGER}
+        )
+    </insert>
+
+    <delete id="delu2g">
+        DELETE FROM sys_u2g WHERE id = #{value}
+    </delete>
+
+    <select id="queryUbyGid" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM view_group_user
+        <where>
+            <if test="groupId != null and groupId != ''"> and group_id LIKE CONCAT('%',#{groupId},'%') </if>
+            <if test="userId != null and userId != ''"> and user_id LIKE CONCAT('%',#{userId},'%') </if>
+            <if test="username != null and username != ''">and username LIKE CONCAT('%',#{username},'%') </if>
+            <if test="name != null and name != ''"> and name LIKE CONCAT('%',#{name},'%') </if>
+            <if test="gender != null and gender != ''">and gender LIKE CONCAT('%',#{gender},'%')</if>
+            <if test="job != null and job != ''"> and job LIKE CONCAT('%',#{job},'%') </if>
+            <if test="birth != null and birth != ''"> and birth LIKE CONCAT('%',#{birth},'%')</if>
+            <if test="comId != null and comId != ''"> and com_id LIKE CONCAT('%',#{comId},'%') </if>
+            <if test="phone != null and phone != ''"> and phone LIKE CONCAT('%',#{phone},'%') </if>
+            <if test="email != null and email != ''"> and email LIKE CONCAT('%',#{email},'%')</if>
+            <if test="address != null and address != ''"> and address LIKE CONCAT('%',#{address},'%') </if>
+            <if test="picId != null and picId != ''"> and pic_id LIKE CONCAT('%',#{picId},'%') </if>
+            <if test="status != null and status != ''"> and status LIKE CONCAT('%',#{status},'%') </if>
+            <if test="createTime != null and createTime != ''"> and create_time LIKE CONCAT('%',#{createTime},'%') </if>
+            <if test="modifyTime != null and modifyTime != ''"> and modify_time LIKE CONCAT('%',#{modifyTime},'%') </if>
+        </where>
+    </select>
+</mapper>

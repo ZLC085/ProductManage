@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ttt.mim.dao.PurchaseDao">
+    <resultMap id="BaseResultType" type="com.ttt.mim.domain.Purchase">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="indent_num" property="indentNum" jdbcType="VARCHAR"/>
+        <result column="purchase_num" property="purchaseNum" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="sum" property="sum" jdbcType="DOUBLE"/>
+        <result column="factory_id" property="factoryId" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
+        <result column="approval_id" property="approvalId" jdbcType="INTEGER"/>
+        <result column="result" property="result" jdbcType="TINYINT"/>
+        <result column="opinion" property="opinion" jdbcType="VARCHAR"/>
+        <result column="approval_time" property="approvalTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,indent_num, purchase_num, name, remark, sum,factory_id, create_time, modify_time, approval_id, result, opinion, approval_time
+    </sql>
+    <insert id="add" useGeneratedKeys="true" keyProperty="id">
+        insert  into goods_info.purchase(indent_num, purchase_num, name, remark, sum,factory_id, create_time, modify_time, approval_id, result, opinion, approval_time)
+        values (
+        #{indentNum} ,#{purchaseNum},#{name},#{remark},#{sum},#{factoryId},#{createTime},#{modifyTime},
+        #{approvalId},#{result},#{opinion},#{approvalTime}
+        )
+    </insert>
+    <update id="update" >
+        update goods_info.purchase 
+        <set>
+            <if test="name!=null and name !=''" >name = #{name},</if>
+            <if test="remark!=null and remark !=''" >remark = #{remark},</if>
+            <if test="sum!=null and sum !=''" >sum = #{sum},</if>
+            <if test="factoryId!=null and factoryId !=''" >factory_id = #{factoryId},</if>
+            <if test="approvalId!=null and approvalId !=''" >approval_id = #{approvalId},</if>
+            <if test="result!=null and result !=''" >result = #{result},</if>
+            <if test="opinion!=null and opinion !=''" >opinion = #{opinion},</if>
+            <if test="modifyTime!=null and modifyTime !=''" >modify_time = #{modifyTime}</if>
+        </set>
+        where purchase_num=#{purchaseNum}
+    </update>
+    <delete id="delete">
+        delete from goods_info.purchase
+        where purchase_num = #{purchaseNum}
+    </delete>
+    <delete id="batchDelete">
+        delete from goods_info.purchase
+        where purchase_num in
+        <foreach collection="array" item="num" separator="," open="(" close=")">
+            #{num}
+        </foreach>
+    </delete>
+    <delete id="deleteByIndentNum">
+        delete from goods_info.purchase
+        where indent_num=#{indentNum}
+    </delete>
+    <select id="get" resultMap="BaseResultType">
+        select
+        <include refid="Base_Column_List"/>
+        from goods_info.purchase
+        where purchase_num = #{purchaseNum}
+    </select>
+    <select id="query" resultMap="BaseResultType">
+        select
+        <include refid="Base_Column_List"/>
+        from goods_info.purchase
+        <where>
+            <if test="id!=null and id!=''"> and id like CONCAT('%',#{id},'%')</if>
+            <if test="indentNum!=null and indentNum!=''"> and indent_num like CONCAT('%',#{indentNum},'%')</if>
+            <if test="purchaseNum!=null and purchaseNum!=''"> and purchase_num like CONCAT('%',#{purchaseNum},'%')</if>
+            <if test="name!=null and name!=''"> and name like CONCAT('%',#{name},'%')</if>
+            <if test="remark!=null and remark!=''"> and remark like CONCAT('%',#{remark},'%')</if>
+            <if test="sum!=null and sum!=''"> and sum = #{sum} </if>
+            <if test="factoryId!=null and factoryId!=''"> and factory_id like CONCAT('%',#{factoryId},'%')</if>
+            <if test="createTime!=null and createTime!=''"> and create_time = #{createTime} </if>
+            <if test="modifyTime!=null and modifyTime!=''"> and modify_time = #{modifyTime} </if>
+            <if test="approvalId!=null and approvalId!=''"> and approval_id like CONCAT('%',#{approvalId},'%')</if>
+            <if test="result!=null and result!=''"> and result = #{result} </if>
+            <if test="opinion!=null and opinion!=''"> and opinion like CONCAT('%',#{opinion},'%')</if>
+            <if test="approvalTime!=null and approvalTime!=''"> and approval_time = #{approvalTime} </if>
+            <if test="startTime !=null and startTime!=''"> and create_time <![CDATA[>=]]>  #{startTime} </if>
+            <if test="endTime !=null and endTime!=''"> and create_time  <![CDATA[<=]]>  #{endTime} </if>
+            <if test="approvalStartTime !=null and approvalStartTime!=''"> and approval_time <![CDATA[>=]]>  #{approvalStartTime} </if>
+            <if test="approvalEndTime !=null and approvalEndTime!=''"> and approval_time  <![CDATA[<=]]>  #{approvalEndTime} </if>
+        </where>
+    </select>
+    <update id="approve">
+        update goods_info.purchase
+        <set>
+            <if test="approvalId!=null and approvalId !=''" >approval_id = #{approvalId},</if>
+            <if test="result!=null and result !=''" >result = #{result},</if>
+            <if test="opinion!=null and opinion !=''" >opinion = #{opinion},</if>
+            <if test="approvalTime!=null and approvalTime !=''" >approval_time = #{approvalTime}</if>
+        </set>
+        where purchase_num=#{purchaseNum}
+    </update>
+    <select id="getResultsByIndentNum" resultType="java.lang.Byte">
+        select result from goods_info.purchase
+        where indent_num =#{indentNum}
+    </select>
+    <select id="getResultByPurchaseNum" resultType="java.lang.Byte">
+        select result from goods_info.purchase
+        where purchase_num =#{purchaseNum} limit 1
+    </select>
+
+    <select id="getTodayMaxPurchaseNum" resultType="java.lang.String">
+        select purchase_num from goods_info.purchase
+        where purchase_num like CONCAT('%',#{todayNumStr},'%')
+        order by id desc limit 1
+    </select>
+    <select id="getPurchaseNumsByIndentNum" resultType="java.lang.String">
+        select purchase_num from goods_info.purchase
+        where indent_num = #{indentNum}
+    </select>
+    
+</mapper>

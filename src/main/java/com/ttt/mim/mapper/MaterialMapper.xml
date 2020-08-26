@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ttt.mim.dao.MaterialDao">
+    <resultMap id="BaseResultMap" type="com.ttt.mim.domain.Material">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="category_id" property="category_id" jdbcType="INTEGER"/>
+        <result column="spec" property="spec" jdbcType="VARCHAR"/>
+        <result column="unit" property="unit" jdbcType="VARCHAR"/>
+        <result column="purpose" property="purpose" jdbcType="VARCHAR"/>
+        <result column="use_unit" property="use_unit" jdbcType="VARCHAR"/>
+        <result column="pic_id" property="pic_id" jdbcType="INTEGER"/>
+        <result column="create_time" property="create_time" jdbcType="TIMESTAMP"/>
+        <result column="modify_time" property="modify_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, name, category_id, spec, unit, purpose, use_unit, pic_id, create_time, modify_time
+    </sql>
+
+    <insert id="add" parameterType="com.ttt.mim.domain.Material" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO m_material (id, name, category_id, spec, unit, purpose, use_unit, pic_id, create_time, modify_time)
+        VALUES (#{id, jdbcType=INTEGER},
+                #{name, jdbcType=VARCHAR},
+                #{category_id, jdbcType=INTEGER},
+                #{spec, jdbcType=VARCHAR},
+                #{unit, jdbcType=VARCHAR},
+                #{purpose, jdbcType=VARCHAR},
+                #{use_unit, jdbcType=VARCHAR},
+                #{pic_id, jdbcType=INTEGER},
+                #{create_time, jdbcType=TIMESTAMP},
+                #{modify_time, jdbcType=TIMESTAMP}
+        )
+    </insert>
+
+    <update id="update" parameterType="com.ttt.mim.domain.Material">
+        UPDATE m_material
+        <set>
+            <if test="name != null">name = #{name}, </if>
+            <if test="category_id != null">category_id = #{category_id}, </if>
+            <if test="spec != null">spec = #{spec}, </if>
+            <if test="unit != null">unit = #{unit}, </if>
+            <if test="purpose != null">purpose = #{purpose}, </if>
+            <if test="use_unit != null">use_unit = #{use_unit}, </if>
+            <if test="pic_id != null">pic_id = #{pic_id}, </if>
+            <if test="create_time != null">create_time = #{create_time}, </if>
+            <if test="modify_time != null">modify_time = #{modify_time} </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM m_material WHERE id = #{id}
+    </delete>
+
+    <delete id="batchDelete">
+        DELETE FROM m_material WHERE id IN
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="getById" parameterType="Integer" resultType="com.ttt.mim.domain.Material">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM m_material
+        <where>
+            id = #{id}
+        </where>
+    </select>
+
+    <select id="query" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM m_material
+        <where>
+            <if test="id != null and id != ''"> and id = #{id} </if>
+            <if test="name != null and name != ''"> and name = #{name} </if>
+            <if test="category_id != null and category_id != ''"> and category_id = #{category_id} </if>
+            <if test="spec != null and spec != ''"> and spec = #{spec} </if>
+            <if test="unit != null and unit != ''"> and unit = #{unit} </if>
+            <if test="purpose != null and purpose != ''"> and purpose = #{purpose} </if>
+            <if test="use_unit != null and use_unit != ''"> and use_unit = #{use_unit} </if>
+            <if test="pic_id != null and pic_id != ''"> and pic_id = #{pic_id} </if>
+            <if test="create_time != null and create_time != ''"> and create_time = #{create_time} </if>
+            <if test="modify_time != null and modify_time != ''"> and modify_time = #{modify_time} </if>
+        </where>
+    </select>
+</mapper>
